@@ -1,0 +1,6 @@
+Open index.html in any browser to see the game!
+
+Whenever you add a new Javascript file, be sure to also add a <script> tag in index.html to include that javascript
+
+Most code can be found in the js folder. Main.js sets up the initial state of the game, so look there if you want to start the game
+with different scenarios / conversations.
