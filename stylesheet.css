@@ -1,0 +1,48 @@
+h1{
+	font-family: sans-serif;
+	color: white;
+	margin:auto;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	-webkit-user-select: none;     
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+body{
+	font-family: "Monsieur La Doulaise";
+	margin: 0px;
+	background-image: url("Resources/Images/Misc/WebsiteBackground.jpg");
+}
+div#main{
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+p.monsier{
+	position: absolute;
+	font-family: "Monsieur La Doulaise";
+	color: rgba(0, 0, 0, 0);
+	-webkit-user-select: none;     
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+p.zcool{
+	position: absolute;
+	font-family: 'ZCOOL XiaoWei', serif;
+	color: rgba(0, 0, 0, 0);
+	-webkit-user-select: none;     
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+canvas{
+	background-image: url("Resources/Images/Misc/CanvasBackground.jpg");
+	border: 4px solid #905030;
+	display: block;
+	margin: auto;
+}
+canvas:focus{
+	outline:none;
+}
