@@ -1,6 +1,35 @@
-Open index.html in any browser to see the game!
+This game (currently unnamed) is an RPG in the artistic style of the Fire Emblem games and the tradition of Dungeons and Dragons.
 
-Whenever you add a new Javascript file, be sure to also add a <script> tag in index.html to include that javascript
+To load the game, open index.html in any web browser (tested primarily in Chrome). Spacebar, Enter key, and Arrow keys used to
+navigate through conversations
+Left click playable units to see and select their actions.
 
-Most code can be found in the js folder. Main.js sets up the initial state of the game, so look there if you want to start the game
-with different scenarios / conversations.
+See js folder for source code:
+main.js contains the "window.onload" functions that initialize the game. If you want to change the starting point, look at the
+initGame function in main.js. 
+"Map Files" contains .js files which set up map terrain and URLs
+"Scenario Files" contains .js files which set up battles and conversations
+
+If you want to add a new .js file, be sure to also add a <script> tag loading it in index.html.
+
+
+
+
+
+Credits:
+Author: Stephen Carey
+Collaborators: John Carey, Thomas Carey
+
+Thanks to the RPG Maker for a huge variety of assets:
+https://www.spriters-resource.com/pc_computer/rpgmakermv/
+https://www.spriters-resource.com/pc_computer/rpgmakervx/
+https://www.spriters-resource.com/pc_computer/rpgmakervxace/
+https://www.spriters-resource.com/pc_computer/rpgmakerxp/
+
+Thanks to Inkarnate Entertainment, LLC for map-making software:
+https://inkarnate.com/
+
+Thanks to the Fire Emblem Character Creator for character-creation software:
+https://www.reddit.com/r/fireemblem/comments/8x4hyy/fire_emblem_portrait_maker_now_with_more_sprites/
+
+Thanks to the students of the St. Paul's Catholic Student Center, Madison WI, for testing and feedback.
