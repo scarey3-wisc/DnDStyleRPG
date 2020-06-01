@@ -1,4 +1,3 @@
-//Human Ecology 4235 10:45 MWF
 
 var myDisplay;
 var canvas;
