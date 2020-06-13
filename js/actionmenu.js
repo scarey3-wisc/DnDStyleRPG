@@ -1,3 +1,4 @@
+//the ActionMenu is the window that appears when the user selects a unit
 function ActionMenu(x, y, unit, mouseDelegate){
 	var selfReference = this;
 	this.x = x;
@@ -10,6 +11,7 @@ function ActionMenu(x, y, unit, mouseDelegate){
 	this.backgroundImage = globalImageLibrary.getImage("ActionMenuBackground");
 	this.x+= 2*this.borderWidth;
 	this.mouseDelegate = mouseDelegate;
+	//setting up all the actions that can be taken
 	var actionList = this.actionList = [];
 	this.actionList.push(new ActionItem(unit, unit.name + "'s Actions", mouseDelegate));
 	this.unit.getActionList().forEach(function(item){
@@ -54,6 +56,9 @@ ActionMenu.prototype.paint = function(canvas){
 	ctx.font = regularFont;
 	ctx.textAlign = "start";
 	ctx.textBaseline = "hanging";
+	//calculating the width is an annoying, some what time consuming operation that requires actually measuring the text.
+	//We don't do it in the constructor, because the constructor knows nothing about the canvas or its context. Instead,
+	//we do it the first time the paint method is called, and never again.
 	if(!this.width){
 		var width = 0;
 		this.actionList.forEach(function(action, index){
