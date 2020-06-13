@@ -1,4 +1,6 @@
 function Conversation(leftNames, rightNames){
+	//we model conversations as always being between two groups, one on left and one on the right. To start, we 
+	//generate and place all the portrait images for each name. 
 	var selfReference = this;
 	var loader = this.loader = new ImageLoader();
 	var portraits = this.portraits = [];
@@ -21,6 +23,8 @@ function Conversation(leftNames, rightNames){
 			{leftSide:false, name: name, icon: loader.loadImage("Resources/Images/Portraits/" + name + ".png")});
 	});
 	var index = 0;
+	//We position the portraits with even spacing, but that could be changed: even dynamically, as part of an animation
+	//during a conversation
 	portraits.forEach(function(character){
 		if(character.leftSide){
 			character.xPercent = (index + 1) * 0.5 / (numLeft + 1);
@@ -30,6 +34,8 @@ function Conversation(leftNames, rightNames){
 		index++;
 	});
 	this.backgroundImage = this.loader.loadImage("Resources/Images/Misc/ConversationBackground.jpg");
+	//A conversation is generally modelled as a directed graph. Each "state" in the conversation has a nextFunction that
+	//jumps to the next state (after some decision process if there are multiple next states)
 	this.currentState = {content:"", message:"", speaker:"", nextFunction:function(){}};
 	this.talking = false;
 	this.horizontalMargins = 10;
@@ -84,6 +90,8 @@ Conversation.prototype.constructState = function(speaker, message){
 				else if(convo.currentState.type == "decision")
 					delegate.paint();
 			}else{
+				//this afterwards is for what happens after a conversation is entirely done.
+				//That usually happens when we reach a state with no nextState
 				afterwards();
 			}
 		}
@@ -100,6 +108,8 @@ Conversation.prototype.getCharacterPortrait = function(name){
 Conversation.prototype.haveCurrentCharacterTalk = function(){
 	var selfReference = this;
 	this.speaking = this.getCharacterPortrait(this.currentState.speaker);
+	//the purpose of this changer is to make the text from message appear one character at a time
+	//which is a nice effect
 	changer = {
 		delay: 30,
 		words: selfReference.currentState.message.split(""),
@@ -121,6 +131,9 @@ Conversation.prototype.haveCurrentCharacterTalk = function(){
 }
 Conversation.prototype.arrowClicked = function(direction){
 	if(this.currentState && this.currentState.type == "decision" && this.decisionData){
+		//decisionData is created in paint, when we actually figure out what the layout of our options should be on
+		//the screen. The rest of this is math to ensure that hitting the arrow keys moves through the decisions
+		//properly, as the user would expect.
 		var data = this.decisionData;
 		if(direction == 'l'){
 			this.currentState.index = (this.currentState.index - 1 + this.decisionData.numItem) % this.decisionData.numItem;
@@ -154,6 +167,8 @@ Conversation.prototype.paint = function(canvas){
 	this.portraits.forEach(function(character){
 		paintPortrait(character);
 	});
+	//painting all the portraits before hand, and then putting a semitransparent black square over them, and
+	//then painting the talking portrait again, makes whoever is talking pop out relative to everyone else
 	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
@@ -202,6 +217,9 @@ Conversation.prototype.paint = function(canvas){
 			totalWidth += width;
 			maxWidth = Math.max(maxWidth, width);
 		});
+		
+		//basically, we start with one row: then, we repeatedly check whehter it fits or not. If it doesn't, we try
+		//adding another row. 
 		var betweenSpace = 4 * horizontalMargins;
 		var betweenVert = 2 * lineSpacing;
 		var numRows = 1;
@@ -234,6 +252,7 @@ Conversation.prototype.paint = function(canvas){
 		var wordX = betweenSpace / 2 
 	}
 	function paintTalking (){
+		//the computation in this function is mostly determining when we should move to the next line of text
 		ctx.font = lineHeight + "px ZCOOL XiaoWei";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "start";
