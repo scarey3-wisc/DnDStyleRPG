@@ -1,6 +1,7 @@
 function Item(name){
 	this.name = name;
 }
+//A catalogue of all the items designed thus far: their images, what they need, and the actions that they generate
 Item.prototype.loadImage = function(loader){
 	var url = "Resources/Images/Items/";
 	var iconName = "Sword";
@@ -34,6 +35,7 @@ Item.prototype.getAvailableActions = function(unit){
 	if(this.name == "Longbow")
 		return Item.longbow(unit);
 }
+//The "best attack" is meant to be part of a progression system where, the more a unit uses ie a sword, the better the action it provides
 Item.shortsword = function(unit){
 	var actions = [];
 	var bestAttack = "Whack";
