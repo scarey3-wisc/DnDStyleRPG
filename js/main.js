@@ -1,4 +1,3 @@
-
 var myDisplay;
 var canvas;
 var globalImageLibrary;
@@ -15,6 +14,8 @@ window.onload = function() {
 	globalImageLibrary.casheImage("Resources/Images/Animations/Bash.png", "Bash");
 	globalImageLibrary.casheImage("Resources/Images/Animations/Punch.png", "Hit");
 }
+//the regular painter is for when we need animations: it should probably be changed to not have a paintFunction as input,
+//because everything just uses the mouseDelegate's paint anyway, and we'd have bugs if anything tried to use a different paint.
 function requestRegularPainter(paintFunction){
 	if(!regularPainter){
 		regularPainter = {
