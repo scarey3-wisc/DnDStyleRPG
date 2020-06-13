@@ -1,3 +1,4 @@
+//A general function for animations that run through different poses in a sprite sheet.
 function Animation(spriteSheet, loc, sheetWidth, sheetHeight, numFrames, delay){
 	this.sheet = spriteSheet;
 	this.loc = loc;
@@ -8,6 +9,7 @@ function Animation(spriteSheet, loc, sheetWidth, sheetHeight, numFrames, delay){
 	this.delay = delay;
 }
 Animation.prototype.getCurrentFrame = function(){
+	//gets whatever part of the sprite sheet we're currently at
 	var canvas = document.createElement("CANVAS");
 	var tileWidth = this.sheet.width / this.sheetWidth;
 	var tileHeight = this.sheet.height / this.sheetHeight;
@@ -28,6 +30,9 @@ Animation.prototype.nextFrame = function(){
 Animation.prototype.done = function(){
 	return this.currentFrame >= this.numFrames;
 }
+//This function isn't actually part of any animation object; interpolate is just a useful function for "do a thing that is supposed
+//to take time with stuff happening every few milliseconds" - which is mostly used in animations. But an Animation Object is
+//specifically a sprite sheet; this function could be used for having a banner move across the screen or some such.
 function interpolate(changer, afterwards){
 	changer.change();
 	if(changer.done()){
