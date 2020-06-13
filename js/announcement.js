@@ -2,6 +2,8 @@ function Announcement(words, type){
 	this.words = words;
 	this.type = type;
 	this.borderWidth = 8;
+	//"New Turn" Announcements should be a lot bigger than "quick tip" style Announcements.
+	//Might want to add more types of Announcements for bigger events
 	if(this.type == "Game-Flow"){
 		this.height = 70;
 		this.width = 525;
@@ -41,21 +43,26 @@ Announcement.prototype.minorAnnounce = function(time, painter, afterwards){
 		change: function(){
 			this.timeElapsed += this.delay;
 			if(this.timeElapsed / time < 0.02){
+				//a brief animation to move the announcement down
 				var percent = (this.timeElapsed / time) / 0.02;
 				selfReference.y = selfReference.startY * (1 - percent) + selfReference.targetY * percent;
 			}else if(this.timeElapsed / time < 0.98){
+				//the actual displaying of the announcement
 				selfReference.y = selfReference.targetY;
 			}else{
+				//a brief animation to move the announcement back up
 				var percent = (this.timeElapsed / time - 0.98) / 0.02;
 				selfReference.y = selfReference.targetY * (1 - percent) + selfReference.finalY * percent;
 				
 			}
 		}
 	};
+	//interpolate causes the changer object we just made to have its change function called at specific intervals.
 	interpolate(changer, afterwards);
 	requestRegularPainter(painter);
 }
 Announcement.prototype.majorAnnounce = function(time, painter, afterwards){
+	//this is almost identical to the minor announcement, except it moves horizontally instead of vertically
 	var selfReference = this;
 	changer = {
 		delay: 20,
