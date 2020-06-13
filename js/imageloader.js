@@ -1,3 +1,6 @@
+//The ImageLoader is an object for whenever we need to load several images at once, and want an onload event to occur only once they've
+//all been loaded. Looking at it again, the loadImage function should really take a list of urls and start loading them all
+//simultaneously. ImageLoader also has the ability to cache images so that, once loaded, they can be looked up by name later.
 function ImageLoader(){
 	this.activeObjects = 0;
 	this.cachedImages = [];
