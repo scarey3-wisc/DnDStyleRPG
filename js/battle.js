@@ -1,16 +1,21 @@
+//A Battle is the primary object in charge of managing the turn, action, and announcement flow of a fight. 
 function Battle(map, delegate, teamNames){
 	var selfReference = this;
 	this.map = map;
 	this.map.battle = this;
+	//The action stack enables undoing actions - I'm considering reworking it; the undoable actions should be slim
 	this.actionStack = [];
 	this.delegate = delegate;
 	this.teamNames = teamNames;
 	this.whoseTurn = -1;
+	//Event hooks! A list of things that can pause the regular flow of battle. Whenever an action occurs, the event hooks
+	//each check whether their conditions have been met
 	this.eventHooks = [];
 	this.addStandardHooks();
 }
 Battle.prototype.addStandardHooks = function(){
 	this.addHook(Battle.onLearnHook, Battle.learnNotification);
+	//a Dynamic Notification is just one whose text isn't determined until the Announcement is actually made
 	this.addHook(Battle.onArmorBreakingHook, Battle.createDynamicNotification(function(act){
 		return act.target.name + "'s armor broke!";
 	}));
@@ -44,6 +49,8 @@ Battle.prototype.doAction = function(act){
 	act.doAction(function(){delegate.paint();});	
 }
 Battle.prototype.undoAction = function(){
+	//just pops an action from the action stack and undoes it. Every action, when created, needs to have both a function for
+	//doing and undoing the action
 	if(this.actionStack.length == 0)
 		return;
 	var act = this.actionStack.pop();
@@ -53,6 +60,7 @@ Battle.prototype.undoAction = function(){
 	return act;
 }
 Battle.prototype.considerTurnEnd = function(){
+	//we end the turn if every unit has given up control
 	var anyActive = false;
 	var whoseTurn = this.whoseTurn;
 	this.map.content.iterate(function(unit){
@@ -64,6 +72,7 @@ Battle.prototype.considerTurnEnd = function(){
 	return !anyActive;
 }
 Battle.prototype.playAsAI = function() {
+	//just makes every unit act according to its AI - or, if it doesn't have an AI - do nothing
 	var selfReference = this;
 	var whoseTurn = selfReference.whoseTurn;
 	var allUnits = [];
@@ -85,6 +94,8 @@ Battle.prototype.setPlayerAppropriateDelegateMode = function(){
 	if(this.whoseTurn == 0){
 		this.delegate.setNavigateMode(this.delegate.myDisplay);
 	}else{
+		//set mode setup is a mode where the mouse does nothing, usually because we're setting stuff up.
+		//but we use it here to prevent the player from doing anything while the AI is active
 		this.delegate.setModeSetup();
 		setTimeout(function(){selfReference.playAsAI();}, 50);
 	}
@@ -108,7 +119,8 @@ Battle.prototype.newTurn = function(skipBanner){
 			return;
 	}
 		
-		
+	//as soon as we start a new turn, we want to consider ending it, because if the AI is all dead, we should skip directly
+	//to the players turn. 
 	if(!this.considerTurnEnd()){
 		if(nextTurn == prevTurn)
 			setTimeout(function(){
@@ -138,6 +150,8 @@ Battle.prototype.newTurn = function(skipBanner){
 		});
 	}
 }
+
+//this is just a list of standard hooks / functions for generating hooks that a scenario may want access to.
 Battle.onLearnHook = function(act){
 	if(act.action && act.unit){
 		this.listOfLearning = act.unit.wouldLearnFrom(act.action);
