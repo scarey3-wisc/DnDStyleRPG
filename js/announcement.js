@@ -59,6 +59,7 @@ Announcement.prototype.minorAnnounce = function(time, painter, afterwards){
 	};
 	//interpolate causes the changer object we just made to have its change function called at specific intervals.
 	interpolate(changer, afterwards);
+	//requestRegularPainter is in main
 	requestRegularPainter(painter);
 }
 Announcement.prototype.majorAnnounce = function(time, painter, afterwards){
