@@ -252,7 +252,7 @@ TrainingScenario.BattleOver = function(protagonist, antagonist, relyWon, flailWo
 			flailState = "Vanguard"
 		else
 			flailState = "Allied";
-		DaggerwaldScenario.IntroductionConversation(protagonist, antagonist, convo.choice, flailState);
+		DaggerwaldScenario(protagonist, antagonist, convo.choice, flailState);
 	}
 	var t0 = convo.constructState("Releus", "We've got " + ((relyDefected != flailDefected)?"him":"them") + ", Commander Alaya.");
 	var t1 = convo.constructState("Alaya", "Indeed. It was a foolish thing to try.");

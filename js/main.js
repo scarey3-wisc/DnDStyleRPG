@@ -6,7 +6,7 @@ var webpageTitle;
 var regularPainter;
 window.onload = function() {
 	globalImageLibrary = new ImageLoader();
-	globalImageLibrary.onload = initGame;
+	globalImageLibrary.onload = initFromBeginning;
 	globalImageLibrary.casheImage("Resources/Images/Misc/ActionMenuBackground.jpg", "ActionMenuBackground");
 	globalImageLibrary.casheImage("Resources/Images/Misc/NotificationBackground.jpg", "NotificationBackground");
 	globalImageLibrary.casheImage("Resources/Images/Misc/AnnouncementBackground.png", "AnnouncementBackground");
@@ -39,7 +39,7 @@ function deactivateRegularPainter(){
 			regularPainter = null;
 	}
 }
-function initGame() {
+function initAtTestPoint() {
 	canvas = document.getElementById('myCanvas');
 	webpageTitle = document.getElementById('title');
 	canvas.focus();

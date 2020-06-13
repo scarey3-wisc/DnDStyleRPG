@@ -38,18 +38,19 @@ function DaggerwaldScenario(rely, flail, relyState, flailState){
 	myDisplay = new MapDisplay(myMap, 47.5, myGame);
 	resizeCanvas();
 	myDisplay.onload = function(){
-		delegate.setNavigateMode(myDisplay);
-		myGame.newTurn(true);
-		delegate.paint();
 		webpageTitle.innerHTML = 'Daggerwald';
+		delegate.paint();
+		DaggerwaldScenario.IntroductionConversation(rely, flail, relyState, flailState, function(){
+			delegate.setNavigateMode(myDisplay);
+			myGame.newTurn(true);
+			delegate.paint();
+		});
 	};
 }
-DaggerwaldScenario.IntroductionConversation = function(rely, flail, relyState, flailState){
+DaggerwaldScenario.IntroductionConversation = function(rely, flail, relyState, flailState, afterwards){
 	var convo = new Conversation(["Alaya"], []);
-	
-	
-	
 	delegate.setConversationMode(convo, myDisplay);
+	convo.afterwards = afterwards;
 	convo.currentState = convo.constructState("Alaya", "I'm sorry.... it looks like Stephen hasn't coded this yet! You should yell at him. But "
 	+ "you can hopefully see part of the Daggerwald map in the background. Stephen hopes to have an epic battle there, with three teams: Player "
 	+ "Team, which is Korelin + possibly Flail, 'Alaya Team' which is the army that Korelin/Flail are working with, and 'Enemies.' Actually doing "
