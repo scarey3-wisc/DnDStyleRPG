@@ -1,3 +1,4 @@
+//Just gives a background to conversations that don't occur with a map in the background.
 function Scene(backgroundURL){
 	var selfReference = this;
 	this.loader = new ImageLoader();

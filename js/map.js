@@ -1,3 +1,9 @@
+//Although a map does some visualizing work, it is mostly a two dimensional array of:
+//locations for people
+//locations for objects on the ground
+//locations for difficult terrain
+//edges between locations, making a map a graph, enabling graph algorithms to help with movement.
+//a sparse implementation of these arrays would be an easy addition, if the graph algorithms start to slow down the game.
 function Map(width, height, backgroundURL){
 	this.width = width;
 	this.height = height;
@@ -129,6 +135,8 @@ Map.prototype.addUnit = function(unit){
 Map.prototype.getContent = function(locs){
 	return this.content.getAt(locs.x, locs.y);
 }
+//making adjacency depend on the unit enables situations where a wilderness expert could move through barriers (like a copse of trees) that a
+//mundane soldier can't.
 Map.prototype.isAdjacent = function(unit, loc){
 	if(unit.x + 1 == loc.x && unit.y == loc.y)
 		return unit.canTravel(this.getEdge(unit.x, unit.y, 'r'));
@@ -140,6 +148,7 @@ Map.prototype.isAdjacent = function(unit, loc){
 		return unit.canTravel(this.getEdge(unit.x, unit.y, 'u'));
 	return false;
 }
+//pythagorean, as-the-crow-flies distance irrespective of barriers.
 Map.prototype.allWithinRadius = function(loc, distance){
 	var result = [];
 	for(var i = Math.max(0, loc.x - distance); i <= Math.min(this.width - 1, loc.x + distance); i++){
@@ -152,6 +161,15 @@ Map.prototype.allWithinRadius = function(loc, distance){
 	}
 	return result;
 }
+
+/*
+*What follows is a rather convoluted series of graph algorithms whose basic purpose is to leverage the power of Dijkstra's algorithm to
+*efficiently find a series of moves for a unit to travel from one location to another. The primary complicating factor is my desire to
+*simultaneously use a pythagorean distance in travelling while respecting variables. I solve these competing constraints by connecting
+*spaces to more than just their adjacent locations (just using diagonal and knight's move connections is enough for normal distances) 
+*using an edge weight of the pythagorean distance (root 2, root 5, etc). We call each connection a "vector".
+*/
+//passableSpaces allows us to override barriers in a select list of spaces. Best used for moving through allied units.
 Map.prototype.findDistances = function(unit, start, endings, passableSpaces){
 	var selfReference = this;
 	var candidates = [];
@@ -251,6 +269,10 @@ Map.prototype.dijkstras = function(source, unit, passableSpaces){
 		});
 	}
 }
+//takes a list of the "vectors" we're using (so adjacent, diagonal, knight move, etc), a section of the map that we're trying
+//to connect for our graph, and tries to do that connection. The two methods we use in the meantime are:
+//valid: ensures that a vector departing from a space won't get outside of the box of the space.
+//licit: ensures that moving along a vector doesn't hit a barrier.
 Map.prototype.linkGraph = function(vectorLengths, candidates, passableSpaces){
 	var licit = this.licitMove;
 	
@@ -282,6 +304,11 @@ Map.prototype.linkGraph = function(vectorLengths, candidates, passableSpaces){
 	}
 }
 Map.prototype.licitMove = function(x1, y1, x2, y2, checker, passableSpaces){
+	//most of this code is just to generate the steps moved along a path (up, down, left, right, etc).
+	//the actual checking is done by the particular vector, which then moves along the path. 
+	//This is to prevent symmetry redundancy: instead of making 8 knight's move vector functions, we make 1
+	//that works along a "primary" and "secondary" direction (so for 2 up 1 left, up would be primary and left would be secondary)
+	//and then can instantiate 8 versions of that vector using different primary and secondaries.
 		var prim = {};
 		var sec = {};
 	if(Math.abs(x2 - x1) >= Math.abs(y2 - y1)){
@@ -333,6 +360,9 @@ Map.prototype.licitMove = function(x1, y1, x2, y2, checker, passableSpaces){
 	}
 	return checker({x:x1, y:y1}, prim, sec, passableSpaces);
 }
+//Using just the first vector, (1,0) would be equivalent to a graph between just adjacents.
+//The other three make our graph algorithm better approximate pythagorean distance. The next vector we could add would be (3,2)
+//or (4,1), but in practice our algorithm is fine without those vector connections.
 Map.prototype.generateVectorLengths = function(unit){
 	var selfReference = this;
 	var canPass = this.canPass;

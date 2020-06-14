@@ -1,3 +1,4 @@
+//Literally just a hard code of all the edges and terrain features in the Daggerwald map.
 function Daggerwald(){
 	Map.call(this, 50, 18, "Resources/Images/Maps/MountainRun.jpg");
 	this.addEdge(12, 4, 'l', "cliff");

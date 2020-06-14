@@ -1,3 +1,4 @@
+//Because the map is mostly graph algorithms, the MapDisplay is mostly visualization software.
 function MapDisplay(map, cellSize, battle){
 	let borderThickness = this.borderThickness = 2;
 	let selfReference = this;
@@ -7,6 +8,7 @@ function MapDisplay(map, cellSize, battle){
 	this.background = document.createElement("CANVAS");
 	this.background.width = cellSize * this.map.width + borderThickness;
 	this.background.height = cellSize * this.map.height + borderThickness;
+	//If the map is bigger than the screen, we want dragging functionality: this set of numbers enables that functionality. 
 	this.xOffset = 0;
 	this.yOffset = 0;
 	this.xStartDrag = 0;
@@ -60,6 +62,8 @@ function MapDisplay(map, cellSize, battle){
 	}
 }
 MapDisplay.prototype.conditionallyHighlight = function(mouseEvent, stroke, condition){
+	//Generally used for highlighting where the mouse is hovering. The condition might be something like "highlight this space
+	//if it is a valid location for a move";
 	var loc = this.convertClick(mouseEvent);
 	var result = condition(loc, this.map.getContent(loc));
 	if(result == 1)
@@ -75,6 +79,7 @@ MapDisplay.prototype.highlight = function(loc, stroke){
 	this.highlightedLocation = {x:loc.x, y:loc.y, stroke:stroke};
 }
 MapDisplay.prototype.setAccentedSpaceList = function(locs, fill, border){
+	//Generally used for highlighting a large area, ie "all the spaces where the selected unit can move"
 	this.accentedSpaceList = locs;
 	this.accentedSpaceList.fill = fill;
 	this.accentedSpaceList.border = border;
@@ -90,6 +95,7 @@ MapDisplay.prototype.removeAnimation = function(anim){
 	if(index != -1)
 		this.animationList.splice(index, 1);
 }
+//the mathematics for drag functionality.
 MapDisplay.prototype.startDrag = function(mouseEvent){
 	if(mouseEvent.button == 0){
 		this.dragging = true;
@@ -199,6 +205,7 @@ MapDisplay.prototype.paint = function(canvas){
 		var showHealth = selfReference.highlightedLocation && unit.x == selfReference.highlightedLocation.x && unit.y == selfReference.highlightedLocation.y;
 		selfReference.paintUnit(unit, ctx, showHealth || unit.showHealth);
 	});
+	//animations aren't part of the actual map: this would be something like a sword swoosh.
 	this.animationList.forEach(function(anim){
 		anim.draw(ctx, cellSize);
 	});

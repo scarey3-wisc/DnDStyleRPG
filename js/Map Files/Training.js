@@ -1,3 +1,4 @@
+//Literally just a hard code of all the edges and terrain features in the Flail fight map.
 function Training(){
 	Map.call(this, 20, 13, "Resources/Images/Maps/TrainingGround.jpg");
 	this.addFeature(0, 5, "stone");

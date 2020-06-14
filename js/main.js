@@ -39,6 +39,7 @@ function deactivateRegularPainter(){
 			regularPainter = null;
 	}
 }
+//My "next step" was to try and get range, and potentially fog of war, working in Daggerwald - hence the initAtTestPoint for my own work.
 function initAtTestPoint() {
 	canvas = document.getElementById('myCanvas');
 	webpageTitle = document.getElementById('title');

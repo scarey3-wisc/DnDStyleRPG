@@ -4,9 +4,12 @@ function Unit(name, speed, armor, maxArmor, items, team){
 	this.armor = armor;
 	this.maxArmor = maxArmor;
 	this.control = false;
+	//speed is how much distance you can cover in a turn; stride is how much movement you have left. 
 	this.stride = speed;
 	this.numActions = 1;
 	this.numBonus = 1;
+	//ninjaLevel is for recording how good a unit is at using its fists: fist fighting doesn't depend on weapons, and so can't
+	//use the ordinary flow for generating actions (which looks at items)
 	this.ninjaLevel = 0;
 	this.team = team;
 	this.items = items;
@@ -85,6 +88,7 @@ Unit.prototype.getActionUseCount = function(actionName){
 		return this.actionUseCount[actionName];
 	return 0;
 }
+//Primarily used as a hook for the battles.
 Unit.prototype.wouldLearnFrom = function(actionName){
 	var formerActionList = this.getActionList();
 	if(!this.actionUseCount[actionName]){
@@ -121,6 +125,7 @@ Unit.prototype.loadImage = function(loader){
 		value.loadImage(loader);
 	});
 }
+//Right now, any terrain blocks movement - this method could be expanded or overwritten for units with special movement abilities.
 Unit.prototype.canTravel = function(terrainType){
 	return !terrainType;
 }
@@ -156,6 +161,8 @@ Unit.prototype.unendTurn = function(){
 	this.control = true;
 	this.sprite = this.colorSprite;
 }
+
+//A series of basic, default units we might want to create.
 Unit.initBystander = function(name, x, y, map, battle){
 	var dum = new Unit(name, 0, 1, 1, [], -1);
 	dum.x = x;

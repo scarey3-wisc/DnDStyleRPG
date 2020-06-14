@@ -1,3 +1,5 @@
+//The mouseDelegate is by far the most complicated object. Its global, and decides how to react to the mouse doing anything. 
+
 function MouseDelegate(canvas){
 	this.canvas = canvas;
 	this.mode = null;
@@ -7,7 +9,9 @@ MouseDelegate.prototype.updateMouseCoords = function(mouseEvent){
 	this.mouseX = mouseEvent.offsetX;
 	this.mouseY = mouseEvent.offsetY;
 }
+//Clean slate for how the delegate works
 MouseDelegate.prototype.setModeSetup = function(){
+	//closeMode is a function that some modes will add, meaning "here's what we do when we leave this mode"
 	if(this.closeMode){
 		this.closeMode();
 	}
@@ -33,6 +37,7 @@ MouseDelegate.prototype.resetListeners = function () {
 	this.canvas.onkeyup = function(keyEvent) { return false; };
 	this.mode = "unset";
 }
+//announcement mode does nothing except wait for a space bar, telling us to skip the announcement.
 MouseDelegate.prototype.setAnnouncementMode = function(announcement){
 	if(this.closeMode){
 		this.closeMode();
@@ -49,11 +54,13 @@ MouseDelegate.prototype.setAnnouncementMode = function(announcement){
 		}
 	}
 }
+//another mode for "doing nothing because something is happening"
 MouseDelegate.prototype.setSceneMode = function(myDisplay){
 	this.setModeSetup();
 	this.mode = "Scene";
 	this.myDisplay = myDisplay;
 }
+//A mode for conversations; space bar means "continue through the conversation", arrow keys are for selecting decisions.
 MouseDelegate.prototype.setConversationMode = function(conversation, display){
 	var selfReference = this;
 	this.setModeSetup();
@@ -94,6 +101,7 @@ MouseDelegate.prototype.setConversationMode = function(conversation, display){
 		selfReference.paint();
 	}
 }
+//Navigate mode is for dragging the map around and highlighting selectable units.
 MouseDelegate.prototype.setNavigateMode = function(myDisplay){
 	this.setModeSetup();
 	this.mode = "Navigate";
@@ -112,6 +120,7 @@ MouseDelegate.prototype.setNavigateMode = function(myDisplay){
 	canvas.onmousemove = function(mouseEvent){
 		selfReference.updateMouseCoords(mouseEvent);
 		myDisplay.drag(mouseEvent);
+		//the first highlight is to change the highlight to a unit (possibly an enemy), but without any visual tells
 		myDisplay.conditionallyHighlight(mouseEvent, null, function(loc, unitFound){
 			if(myDisplay.dragging)
 				return 0;
@@ -119,6 +128,7 @@ MouseDelegate.prototype.setNavigateMode = function(myDisplay){
 				return 1;
 			return -1;
 		});
+		//the second highlight is to look specifically for allied units
 		myDisplay.conditionallyHighlight(mouseEvent, myDisplay.defaultHighlightColor, function(loc, unit){
 			if(myDisplay.dragging)
 				return 0;
@@ -128,6 +138,7 @@ MouseDelegate.prototype.setNavigateMode = function(myDisplay){
 		});
 		myDisplay.paint(canvas);
 	}
+	//letting us select the player's units to get into the action menu
 	canvas.onclick = function(mouseEvent) {
 		var unit = myDisplay.unitAt(mouseEvent);
 		if(unit && unit.control){
@@ -140,6 +151,7 @@ MouseDelegate.prototype.setNavigateMode = function(myDisplay){
 	}
 	this.paint();
 }
+//another mode for doing nothing, but this one with highlighting. This could be used for animation.
 MouseDelegate.prototype.setWaitingMode = function(unit){
 	this.setModeSetup();
 	this.mode = "Waiting";

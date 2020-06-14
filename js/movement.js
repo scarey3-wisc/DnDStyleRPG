@@ -1,9 +1,12 @@
+//Movement is a type of action; it can go on the action stack, be done, be undone, etc.
 function Movement(unit, target, afterDoing, afterUndoing){
 	this.animatedAction = true;
 	this.type = "move";
 	this.unit = unit;
 	this.start = {x: unit.x, y: unit.y};
 	this.end = {x: target.x, y: target.y};
+	//Dijkstra's algorithm in the map file maintains a list of every space used to get to each space; the "legacy".
+	//Here, we can use the legacy to get a series of spaces that our unit should move through in its animation.
 	this.path = target.legacy;
 	this.path.push(target);
 	this.map = unit.map;
@@ -21,6 +24,8 @@ Movement.prototype.doAction = function(painter){
 	unit.stride -= distance;
 	var travelTime = 800 * distance / unit.speed;
 	
+	//bear in mind that we need to figure out which section of the path (which contains multiple locations) we're in, and then interpolate
+	//between the two endpoints.
 	interpolateLocation = {
 		time: 0,
 		totalTime: travelTime,
@@ -63,6 +68,7 @@ Movement.prototype.undoAction = function(painter){
 	var path = this.path;
 	var distance = path[path.length - 1].distance;
 	unit.stride += distance;
+	//the travel time is a lot less; undoing a movement should be a lot faster, visually, than doing it.
 	var travelTime = 300 * distance / unit.speed;
 	if(!unit.control)
 		unit.unendTurn();

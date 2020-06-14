@@ -1,3 +1,4 @@
+//Literally just a hard code of all the edges and terrain features in the guard room map.
 function Pretraining(){
 	Map.call(this, 8, 6, "Resources/Images/Maps/TraineeRoom.jpg");
 	this.addFeature(0, 0, "stone");

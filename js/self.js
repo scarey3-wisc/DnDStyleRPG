@@ -1,3 +1,6 @@
+//This file contains several actions that involve instant activation, like waiting, picking up an object, etc. It basically just
+//contains functions for checking whether those actions are allowed, and for what happens when they're selected.
+
 var SelfActionItems = {};
 SelfActionItems.getWhenSelectedFunction = function(unit, actionName, controller){
 	var doer = {

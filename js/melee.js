@@ -1,3 +1,4 @@
+//Melee is a type of action; it can go on the action stack and such.
 function Melee(unit, target, action, afterDoing, afterUndoing){
 	this.animatedAction = true;
 	this.unit = unit;
@@ -16,6 +17,7 @@ function Melee(unit, target, action, afterDoing, afterUndoing){
 	this.cost = Melee.actionCost(action);
 	this.generateAnimation();
 }
+//does the damage, sets up the animation (although the mouseDelegate/artificialIntelligence is what actually runs the animation), pays any costs.
 Melee.prototype.doAction = function(painter){
 	var target = this.target;
 	target.showHealth = true;
@@ -57,6 +59,8 @@ Melee.prototype.doAction = function(painter){
 	interpolate(animate, this.afterDoing);
 	requestRegularPainter(painter);
 }
+//Undoes the cost, damage, etc - the animation is just to temporarily show the health that is healed. We probably aren't going to allow
+//actions to actually be undone.
 Melee.prototype.undoAction = function(painter){
 	var target = this.target;
 	target.showHealth = true;
@@ -85,6 +89,7 @@ Melee.prototype.undoAction = function(painter){
 	}
 	interpolate(animate, this.afterUndoing);
 }
+//Just checks whether we can actually do this.
 Melee.actionCapable = function(action, unit){
 	var cost = Melee.actionCost(action);
 	if(unit.numActions < cost.actions)
