@@ -1,7 +1,9 @@
 This game (currently unnamed) is an RPG in the artistic style of the Fire Emblem games and the tradition of Dungeons and Dragons.
 I particularly wanted to focus on some technical challenges with moving characters. Turn based RPG maps often only allow units 
 to move in combinations of vertical and horizontal steps on a cartesian grid. I wanted to keep the cartesian grid, but enable movement 
-to follow the most direct path from point A to point B while simultaneously respecting obstacles that may be in the way. 
+to follow the most direct path from point A to point B while simultaneously respecting obstacles that may be in the way. Ie,
+a character on open ground should be able to walk in a straight line in any direction while a character in a room should move around
+obstacles in the most direct path.
 
 Look in the Screenshots Folder for examples of the game's visual style and mechanics.
 
